@@ -1,21 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+// import { View, StyleSheet, ScrollView } from "react-native";
+import * as Font from "expo-font";
+// import Home from "./screens/Home";
+import AppLoading from "expo-app-loading";
+import Navigator from "./routes/Drawer";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import Constants from "expo-constants";
+
+const getFonts = () =>
+  Font.loadAsync({
+    "nunito-bold": require("./assets/fonts/Nunito-Bold.ttf"),
+    "nunito-regular": require("./assets/fonts/Nunito-Regular.ttf"),
+  });
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  if (fontLoaded) {
+    return (
+      <SafeAreaProvider style={{ paddingTop: Constants.statusBarHeight }}>
+        {/* <View> */}
+        <Navigator />
+        {/* </View> */}
+      </SafeAreaProvider>
+    );
+  } else {
+    return (
+      <AppLoading
+        startAsync={getFonts}
+        onFinish={() => setFontLoaded(true)}
+        onError={() => console.log("error")}
+      />
+    );
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+// const styles = StyleSheet.create({
+//   nav: {
+//     color: 'red'
+//   }
+// });
